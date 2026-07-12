@@ -95,7 +95,7 @@ HOST=0.0.0.0
 PORT=8000
 
 GEMINI_API_KEY=YOUR_API_KEY
-GEMINI_MODEL=gemini-2.5-flash-preview
+GEMINI_MODEL=gemini-3-flash-preview
 
 ENVIRONMENT=development
 ```
