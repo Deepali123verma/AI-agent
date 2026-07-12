@@ -27,8 +27,8 @@ class Settings(BaseSettings):
 
     # CORS
     CORS_ORIGINS: list[str] = [
-        "http://localhost:3000",  # Local React dev server
-        "http://localhost:8000",  # Allow same origin
+        "http://localhost:5173",  # Frontend dev server (Vite)
+        "http://localhost:3000",  # React dev server
     ]
     CORS_ALLOW_CREDENTIALS: bool = True
     CORS_ALLOW_METHODS: list[str] = ["*"]
