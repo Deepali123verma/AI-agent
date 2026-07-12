@@ -37,8 +37,7 @@ class Settings(BaseSettings):
     # Environment
     ENVIRONMENT: str = "development"
 
-    # API Configuration
-    API_V1_PREFIX: str = "/api/v1"
+    
 
     # Google Gemini Configuration
     GEMINI_API_KEY: Optional[str] = None
