@@ -34,36 +34,36 @@ router = APIRouter(
 async def chat(request: ChatRequest) -> ChatResponse:
     """
     Send a message to the Personal AI Agent using Google Gemini
-    
+
     Args:
         request: ChatRequest model containing the user's message
-        
+
     Returns:
         ChatResponse: Contains the AI agent's response
-        
+
     Raises:
         HTTPException: 400 if message is invalid
         HTTPException: 500 if Gemini API fails
         HTTPException: 503 if service is unavailable
     """
-    
+
     # Validate message is not empty (Pydantic already validates min_length)
     if not request.message or not request.message.strip():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Message cannot be empty or contain only whitespace"
         )
-    
+
     try:
         # Call Gemini service to generate response
         ai_response = gemini_service.generate_response(request.message)
-        
+
         return ChatResponse(response=ai_response)
-    
+
     except ValueError as e:
         # Handle validation and configuration errors
         detail = str(e)
-        
+
         # Check for specific error types
         if "GEMINI_API_KEY" in detail or "not configured" in detail:
             raise HTTPException(
@@ -87,7 +87,7 @@ async def chat(request: ChatRequest) -> ChatResponse:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=detail
             )
-    
+
     except Exception as e:
         # Handle unexpected errors
         detail = f"AI service error: {str(e)}"
@@ -108,28 +108,34 @@ async def chat(request: ChatRequest) -> ChatResponse:
 async def chat_stream(request: ChatRequest):
     """
     Stream a message to the Personal AI Agent using real-time token streaming.
-    
+
     The response is streamed using Server-Sent Events (SSE) format,
     allowing progressive delivery of tokens from the Gemini model as they are generated.
-    
+
     Args:
         request: ChatRequest model containing the user's message.
-        
+
     Returns:
-        StreamingResponse: SSE stream with format "data: {token}\n\n" for each token.
-        
+        StreamingResponse: SSE stream with format "data: {token}\\n\\n" for each token.
+
     Raises:
         HTTPException: Various status codes based on error type (400, 429, 503, 500).
-        
+
     Example frontend usage (JavaScript):
-        const eventSource = new EventSource('/chat/stream');
-        eventSource.onmessage = (event) => {
-            const token = event.data;
-            console.log('Received token:', token);
-        };
-        eventSource.onerror = () => eventSource.close();
+        This endpoint uses HTTP POST and streams responses using Server-Sent Events (SSE).
+        Use fetch() with a ReadableStream because EventSource only supports GET requests.
+
+        const response = await fetch("/chat/stream", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: "Hello"
+            })
+        });
     """
-    
+
     # ========== INPUT VALIDATION ==========
     if not request.message or not request.message.strip():
         raise HTTPException(
@@ -141,10 +147,10 @@ async def chat_stream(request: ChatRequest):
     def stream_generator() -> Generator[str, None, None]:
         """
         Generator that yields SSE-formatted tokens from the Gemini service.
-        
-        SSE format: "data: {content}\n\n"
+
+        SSE format: "data: {content}\\n\\n"
         - Each event is JSON-encoded for safe transmission
-        - Empty lines (\n\n) delimit events
+        - Empty lines (\\n\\n) delimit events
         - Frontend parses with EventSource API
         """
         try:
@@ -158,7 +164,7 @@ async def chat_stream(request: ChatRequest):
         except ValueError as e:
             # Handle service-level validation/config errors
             error_detail = str(e)
-            
+
             # Send error event to client before closing stream
             if "GEMINI_API_KEY" in error_detail or "not configured" in error_detail:
                 error_msg = "AI service is not properly configured."
@@ -213,4 +219,3 @@ async def chat_stream(request: ChatRequest):
             "X-Accel-Buffering": "no",  # Disable buffering on nginx
         }
     )
-
