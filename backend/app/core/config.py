@@ -27,8 +27,10 @@ class Settings(BaseSettings):
 
     # CORS
     CORS_ORIGINS: list[str] = [
-        "http://localhost:5173",  # Frontend dev server (Vite)
-        "http://localhost:3000",  # React dev server
+       "http://localhost:8080",
+       "http://localhost:5173",
+       "http://localhost:3000",
+            
     ]
     CORS_ALLOW_CREDENTIALS: bool = True
     CORS_ALLOW_METHODS: list[str] = ["*"]
@@ -37,8 +39,7 @@ class Settings(BaseSettings):
     # Environment
     ENVIRONMENT: str = "development"
 
-    
-
+   
     # Google Gemini Configuration
     GEMINI_API_KEY: Optional[str] = None
     # Using gemini-3-flash-preview (same as Google AI Studio)
