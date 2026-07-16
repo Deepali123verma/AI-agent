@@ -1,6 +1,6 @@
-# 🤖 Personal AI Agent Backend
+# 🤖 Multiverse AI Agent Backend
 
-A modern, production-ready **FastAPI backend** for a Personal AI Agent powered by **Google Gemini AI**.
+A modern, production-ready **FastAPI backend** for a Multiverse AI Agent powered by **Google Gemini AI**.
 
 The backend provides REST APIs, real-time streaming responses, environment-based configuration, and interactive API documentation.
 
@@ -88,7 +88,7 @@ pip install -r requirements.txt
 Create a `.env` file inside the backend folder.
 
 ```env
-APP_NAME=Personal AI Agent Backend
+APP_NAME=Multiverse AI Agent Backend
 APP_VERSION=0.1.0
 
 HOST=0.0.0.0
